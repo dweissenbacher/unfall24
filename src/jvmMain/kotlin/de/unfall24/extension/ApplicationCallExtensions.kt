@@ -8,5 +8,5 @@ suspend fun <RESP> ApplicationCall.withProfile(block: suspend (User) -> RESP): R
     val user = this.sessions.get<User>()
     return user?.let {
         block(user)
-    } ?: throw IllegalStateException("User not set!")
+    } ?: throw SecurityException("User not logged in!")
 }
