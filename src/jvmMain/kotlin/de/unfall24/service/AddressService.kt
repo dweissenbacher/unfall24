@@ -1,30 +1,17 @@
-package de.unfall24
+package de.unfall24.service
 
-import de.unfall24.Db.dbQuery
-import de.unfall24.Db.queryList
 import com.github.andrewoma.kwery.core.builder.query
 import com.google.inject.Inject
-import io.ktor.server.application.ApplicationCall
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
-import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
+import de.unfall24.AddressDao
+import de.unfall24.Db
+import de.unfall24.Db.queryList
+import de.unfall24.model.Address
+import io.ktor.server.application.*
+import org.jetbrains.exposed.sql.*
 import org.joda.time.DateTime
 import java.sql.ResultSet
 import java.time.ZoneId
-import java.util.*
-
-suspend fun <RESP> ApplicationCall.withProfile(block: suspend (Profile) -> RESP): RESP {
-    val profile = this.sessions.get<Profile>()
-    return profile?.let {
-        block(profile)
-    } ?: throw IllegalStateException("Profile not set!")
-}
+import java.util.Date
 
 @Suppress("ACTUAL_WITHOUT_EXPECT")
 actual class AddressService : IAddressService {
@@ -34,7 +21,7 @@ actual class AddressService : IAddressService {
 
     override suspend fun getAddressList(search: String?, types: String, sort: Sort) =
         call.withProfile { profile ->
-            dbQuery {
+            Db.dbQuery {
                 val query = query {
                     select("SELECT * FROM address")
                     whereGroup {
@@ -68,7 +55,7 @@ actual class AddressService : IAddressService {
         }
 
     override suspend fun addAddress(address: Address) = call.withProfile { profile ->
-        val key = dbQuery {
+        val key = Db.dbQuery {
             (AddressDao.insert {
                 it[firstName] = address.firstName
                 it[lastName] = address.lastName
@@ -87,7 +74,7 @@ actual class AddressService : IAddressService {
     override suspend fun updateAddress(address: Address) = call.withProfile { profile ->
         address.id?.let {
             getAddress(it)?.let { oldAddress ->
-                dbQuery {
+                Db.dbQuery {
                     AddressDao.update({ AddressDao.id eq it }) {
                         it[firstName] = address.firstName
                         it[lastName] = address.lastName
@@ -96,7 +83,7 @@ actual class AddressService : IAddressService {
                         it[postalAddress] = address.postalAddress
                         it[favourite] = address.favourite ?: false
                         it[createdAt] = oldAddress.createdAt
-                            ?.let { DateTime(java.util.Date.from(it.atZone(ZoneId.systemDefault()).toInstant())) }
+                            ?.let { DateTime(Date.from(it.atZone(ZoneId.systemDefault()).toInstant())) }
                         it[userId] = profile.id!!
                     }
                 }
@@ -106,12 +93,12 @@ actual class AddressService : IAddressService {
     }
 
     override suspend fun deleteAddress(id: Int): Boolean = call.withProfile { profile ->
-        dbQuery {
+        Db.dbQuery {
             AddressDao.deleteWhere { (AddressDao.userId eq profile.id!!) and (AddressDao.id eq id) } > 0
         }
     }
 
-    private suspend fun getAddress(id: Int): Address? = dbQuery {
+    private suspend fun getAddress(id: Int): Address? = Db.dbQuery {
         AddressDao.select {
             AddressDao.id eq id
         }.mapNotNull { toAddress(it) }.singleOrNull()
@@ -144,34 +131,4 @@ actual class AddressService : IAddressService {
                 ?.atZone(ZoneId.systemDefault())?.toLocalDateTime(),
             userId = rs.getInt(AddressDao.userId.name)
         )
-}
-
-@Suppress("ACTUAL_WITHOUT_EXPECT")
-actual class ProfileService : IProfileService {
-
-    @Inject
-    lateinit var call: ApplicationCall
-
-    override suspend fun getProfile() = call.withProfile { it }
-
-}
-
-@Suppress("ACTUAL_WITHOUT_EXPECT")
-actual class RegisterProfileService : IRegisterProfileService {
-
-    override suspend fun registerProfile(profile: Profile, password: String): Boolean {
-        try {
-            dbQuery {
-                UserDao.insert {
-                    it[this.name] = profile.name!!
-                    it[this.username] = profile.username!!
-                    it[this.password] = DigestUtils.sha256Hex(password)
-                }
-            }
-        } catch (e: Exception) {
-            throw Exception("Register operation failed!")
-        }
-        return true
-    }
-
 }

@@ -1,6 +1,10 @@
 package de.unfall24
 
 import de.unfall24.Db.dbQuery
+import de.unfall24.model.Profile
+import de.unfall24.service.IAddressService
+import de.unfall24.service.IProfileService
+import de.unfall24.service.IRegisterProfileService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

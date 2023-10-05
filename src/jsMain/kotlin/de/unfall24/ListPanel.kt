@@ -1,5 +1,6 @@
 package de.unfall24
 
+import de.unfall24.service.Sort
 import io.kvision.core.AlignItems
 import io.kvision.core.FontStyle
 import io.kvision.core.onEvent

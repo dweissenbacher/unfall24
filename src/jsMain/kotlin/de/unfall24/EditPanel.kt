@@ -1,5 +1,6 @@
 package de.unfall24
 
+import de.unfall24.model.Address
 import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
 import io.kvision.form.check.CheckBox

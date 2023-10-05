@@ -33,6 +33,7 @@ class App : Application() {
                     "pl" to require("i18n/messages-pl.json")
                 )
             )
+
         root("kvapp") {
             splitPanel {
                 width = 100.perc
@@ -41,6 +42,7 @@ class App : Application() {
                 add(EditPanel)
             }
         }
+
         AppScope.launch {
             Model.getAddressList()
         }
