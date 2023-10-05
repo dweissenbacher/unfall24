@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table

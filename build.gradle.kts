@@ -5,6 +5,7 @@ plugins {
     val kotlinVersion: String by System.getProperties()
     kotlin("plugin.serialization") version kotlinVersion
     kotlin("multiplatform") version kotlinVersion
+
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
 }
@@ -126,4 +127,8 @@ kotlin {
             }
         }
     }
+}
+
+tasks.getByName("jsRun") {
+    group = "run"
 }

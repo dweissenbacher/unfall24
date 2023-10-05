@@ -1,11 +1,11 @@
-package com.example
+package de.unfall24
 
 import io.kvision.annotations.KVService
 import kotlinx.serialization.Serializable
 
 @Serializable
 enum class Sort {
-    FN, LN, E, F
+    FIRST_NAME, LAST_NAME, EMAIL, FAVOURITE
 }
 
 @KVService

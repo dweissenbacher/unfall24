@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import io.kvision.state.ObservableList
 import io.kvision.state.ObservableValue
@@ -29,7 +29,7 @@ object Model {
                 getAddressList()
             }
         }
-    var sort = Sort.FN
+    var sort = Sort.FIRST_NAME
         set(value) {
             field = value
             AppScope.launch {

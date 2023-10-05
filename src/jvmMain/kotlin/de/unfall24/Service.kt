@@ -1,7 +1,7 @@
-package com.example
+package de.unfall24
 
-import com.example.Db.dbQuery
-import com.example.Db.queryList
+import de.unfall24.Db.dbQuery
+import de.unfall24.Db.queryList
 import com.github.andrewoma.kwery.core.builder.query
 import com.google.inject.Inject
 import io.ktor.server.application.ApplicationCall
@@ -17,6 +17,7 @@ import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 import java.sql.ResultSet
 import java.time.ZoneId
+import java.util.*
 
 suspend fun <RESP> ApplicationCall.withProfile(block: suspend (Profile) -> RESP): RESP {
     val profile = this.sessions.get<Profile>()
@@ -54,10 +55,10 @@ actual class AddressService : IAddressService {
                         }
                     }
                     when (sort) {
-                        Sort.FN -> orderBy("lower(first_name)")
-                        Sort.LN -> orderBy("lower(last_name)")
-                        Sort.E -> orderBy("lower(email)")
-                        Sort.F -> orderBy("favourite")
+                        Sort.FIRST_NAME -> orderBy("lower(first_name)")
+                        Sort.LAST_NAME -> orderBy("lower(last_name)")
+                        Sort.EMAIL -> orderBy("lower(email)")
+                        Sort.FAVOURITE -> orderBy("favourite")
                     }
                 }
                 queryList(query.sql, query.parameters) {
@@ -125,7 +126,7 @@ actual class AddressService : IAddressService {
             phone = row[AddressDao.phone],
             postalAddress = row[AddressDao.postalAddress],
             favourite = row[AddressDao.favourite],
-            createdAt = row[AddressDao.createdAt]?.millis?.let { java.util.Date(it) }?.toInstant()
+            createdAt = row[AddressDao.createdAt]?.millis?.let { Date(it) }?.toInstant()
                 ?.atZone(ZoneId.systemDefault())?.toLocalDateTime(),
             userId = row[AddressDao.userId]
         )

@@ -1,6 +1,6 @@
-package com.example
+package de.unfall24
 
-import com.example.Db.dbQuery
+import de.unfall24.Db.dbQuery
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

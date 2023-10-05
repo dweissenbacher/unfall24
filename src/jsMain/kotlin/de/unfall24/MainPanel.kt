@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import io.kvision.core.JustifyContent
 import io.kvision.html.ButtonStyle

@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
@@ -45,7 +45,8 @@ class LoginWindow : Dialog<Credentials>(closeButton = false, escape = false, ani
                 validatorMessage = { "Password too short" }) {
                 (it.getValue()?.length ?: 0) >= 8
             }
-            add(Profile::password2, Password(label = "${tr("Confirm password")}:"), required = true,
+            add(
+                Profile::password2, Password(label = "${tr("Confirm password")}:"), required = true,
                 validatorMessage = { tr("Password too short") }) {
                 (it.getValue()?.length ?: 0) >= 8
             }

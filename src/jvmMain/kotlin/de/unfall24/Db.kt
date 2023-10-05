@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import com.axiomalaska.jdbc.NamedParameterPreparedStatement
 import com.zaxxer.hikari.HikariConfig

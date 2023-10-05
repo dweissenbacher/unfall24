@@ -1,6 +1,6 @@
 @file:UseContextualSerialization(LocalDateTime::class)
 
-package com.example
+package de.unfall24
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseContextualSerialization

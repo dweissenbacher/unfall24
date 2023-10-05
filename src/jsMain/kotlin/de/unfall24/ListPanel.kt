@@ -1,4 +1,4 @@
-package com.example
+package de.unfall24
 
 import io.kvision.core.AlignItems
 import io.kvision.core.FontStyle
@@ -47,10 +47,10 @@ object ListPanel : SimplePanel() {
         }
 
         table(types = setOf(TableType.STRIPED, TableType.HOVER)) {
-            addHeaderCell(this@ListPanel.sortingHeaderCell(tr("First name"), Sort.FN))
-            addHeaderCell(this@ListPanel.sortingHeaderCell(tr("Last name"), Sort.LN))
-            addHeaderCell(this@ListPanel.sortingHeaderCell(tr("E-mail"), Sort.E))
-            addHeaderCell(this@ListPanel.sortingHeaderCell("", Sort.F))
+            addHeaderCell(sortingHeaderCell(tr("First name"), Sort.FIRST_NAME))
+            addHeaderCell(sortingHeaderCell(tr("Last name"), Sort.LAST_NAME))
+            addHeaderCell(sortingHeaderCell(tr("E-mail"), Sort.EMAIL))
+            addHeaderCell(sortingHeaderCell("", Sort.FAVOURITE))
             addHeaderCell(HeaderCell(""))
             bind(Model.addresses) { addresses ->
                 addresses.forEachIndexed { index, address ->
