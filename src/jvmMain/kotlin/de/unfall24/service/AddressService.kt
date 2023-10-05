@@ -5,6 +5,7 @@ import com.google.inject.Inject
 import de.unfall24.AddressDao
 import de.unfall24.Db
 import de.unfall24.Db.queryList
+import de.unfall24.extensions.withProfile
 import de.unfall24.model.Address
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.*

@@ -1,10 +1,6 @@
-@file:UseContextualSerialization(LocalDateTime::class)
-
 package de.unfall24.model
 
-import io.kvision.types.LocalDateTime
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseContextualSerialization
 
 @Serializable
 data class Profile(
