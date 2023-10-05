@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+
+#: src/jsMain/kotlin/com/example/MainPanel.kt:14
+msgid "Add new address"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:39
+msgid "All"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/EditPanel.kt:45
+#: src/jsMain/kotlin/com/example/Security.kt:63
+msgid "Cancel"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:76
+msgid "Delete"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:52
+msgid "E-mail"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:70
+msgid "Favourite"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:39
+msgid "Favourites"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:50
+msgid "First name"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/ListPanel.kt:51
+msgid "Last name"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:73
+msgid "Login"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/EditPanel.kt:39
+msgid "Mark as favourite"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:55
+#: src/jsMain/kotlin/com/example/Security.kt:56
+msgid "Passwords are not the same"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:68
+msgid "Register"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:78
+msgid "Register user"
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:126
+msgid "This login is not available. Please try again."
+msgstr ""
+
+#: src/jsMain/kotlin/com/example/Security.kt:122
+msgid "User registered. You can now log in."
+msgstr ""
