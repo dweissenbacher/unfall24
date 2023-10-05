@@ -1,6 +1,6 @@
 package de.unfall24
 
-import de.unfall24.model.Profile
+import de.unfall24.model.User
 import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
 import io.kvision.form.formPanel
@@ -22,7 +22,7 @@ class LoginWindow : Dialog<Credentials>(closeButton = false, escape = false, ani
     private val loginPanel: FormPanel<Credentials>
     private val loginButton: Button
     private val userButton: Button
-    private val registerPanel: FormPanel<Profile>
+    private val registerPanel: FormPanel<User>
     private val registerButton: Button
     private val cancelButton: Button
 
@@ -39,23 +39,23 @@ class LoginWindow : Dialog<Credentials>(closeButton = false, escape = false, ani
             }
         }
         registerPanel = formPanel {
-            add(Profile::name, Text(label = "${tr("Your name")}:"), required = true)
-            add(Profile::username, Text(label = "Login:"), required = true)
+            add(User::name, Text(label = "${tr("Your name")}:"), required = true)
+            add(User::username, Text(label = "Login:"), required = true)
             add(
-                Profile::password, Password(label = "${tr("Password")}:"), required = true,
+                User::password, Password(label = "${tr("Password")}:"), required = true,
                 validatorMessage = { "Password too short" }) {
                 (it.getValue()?.length ?: 0) >= 8
             }
             add(
-                Profile::password2, Password(label = "${tr("Confirm password")}:"), required = true,
+                User::password2, Password(label = "${tr("Confirm password")}:"), required = true,
                 validatorMessage = { tr("Password too short") }) {
                 (it.getValue()?.length ?: 0) >= 8
             }
             validator = {
-                val result = it[Profile::password] == it[Profile::password2]
+                val result = it[User::password] == it[User::password2]
                 if (!result) {
-                    it.getControl(Profile::password)?.validatorError = tr("Passwords are not the same")
-                    it.getControl(Profile::password2)?.validatorError = tr("Passwords are not the same")
+                    it.getControl(User::password)?.validatorError = tr("Passwords are not the same")
+                    it.getControl(User::password2)?.validatorError = tr("Passwords are not the same")
                 }
                 result
             }
@@ -119,7 +119,7 @@ class LoginWindow : Dialog<Credentials>(closeButton = false, escape = false, ani
         if (registerPanel.validate()) {
             val userData = registerPanel.getData()
             AppScope.launch {
-                if (Model.registerProfile(userData, userData.password!!)
+                if (Model.registerProfile(userData)
                 ) {
                     Alert.show(text = tr("User registered. You can now log in.")) {
                         hideRegisterForm()

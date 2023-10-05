@@ -1,9 +1,9 @@
 package de.unfall24
 
 import de.unfall24.model.Address
-import de.unfall24.model.Profile
+import de.unfall24.model.User
 import de.unfall24.service.AddressService
-import de.unfall24.service.ProfileService
+import de.unfall24.service.UserService
 import de.unfall24.service.RegisterProfileService
 import de.unfall24.service.Sort
 import io.kvision.state.ObservableList
@@ -15,11 +15,11 @@ import kotlinx.coroutines.launch
 object Model {
 
     private val addressService = AddressService()
-    private val profileService = ProfileService()
+    private val userService = UserService()
     private val registerProfileService = RegisterProfileService()
 
     val addresses: ObservableList<Address> = observableListOf()
-    val profile = ObservableValue(Profile())
+    val user = ObservableValue(User())
 
     var search: String? = null
         set(value) {
@@ -74,13 +74,13 @@ object Model {
 
     suspend fun readProfile() {
         Security.withAuth {
-            profile.value = profileService.getProfile()
+            user.value = userService.getUser()
         }
     }
 
-    suspend fun registerProfile(profile: Profile, password: String): Boolean {
+    suspend fun registerProfile(user: User): Boolean {
         return try {
-            registerProfileService.registerProfile(profile, password)
+            registerProfileService.registerProfile(user)
         } catch (e: Exception) {
             console.log(e)
             false

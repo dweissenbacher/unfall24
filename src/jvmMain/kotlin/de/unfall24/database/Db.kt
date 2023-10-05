@@ -1,4 +1,4 @@
-package de.unfall24
+package de.unfall24.database
 
 import com.axiomalaska.jdbc.NamedParameterPreparedStatement
 import com.zaxxer.hikari.HikariConfig
@@ -19,8 +19,8 @@ object Db {
     fun init(config: ApplicationConfig) {
         Database.connect(hikari(config))
         transaction {
-            create(UserDao)
-            create(AddressDao)
+            create(UserTable)
+            create(AddressTable)
         }
     }
 

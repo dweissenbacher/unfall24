@@ -14,7 +14,7 @@ object MainPanel : HPanel(justify = JustifyContent.SPACEBETWEEN) {
         button(tr("Add new address"), "fas fa-plus", style = ButtonStyle.PRIMARY).onClick {
             EditPanel.add()
         }
-        div().bind(Model.profile) { profile ->
+        div().bind(Model.user) { profile ->
             if (profile.name != null) {
                 button("Logout: ${profile.name}", "fas fa-sign-out-alt", style = ButtonStyle.WARNING).onClick {
                     document.location?.href = "/logout"

@@ -1,9 +1,11 @@
 package de.unfall24
 
-import de.unfall24.Db.dbQuery
-import de.unfall24.model.Profile
+import de.unfall24.database.Db
+import de.unfall24.database.Db.dbQuery
+import de.unfall24.database.UserTable
+import de.unfall24.model.User
 import de.unfall24.service.IAddressService
-import de.unfall24.service.IProfileService
+import de.unfall24.service.IUserService
 import de.unfall24.service.IRegisterProfileService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -27,7 +29,7 @@ fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
     install(Sessions) {
-        cookie<Profile>("KTSESSION", storage = SessionStorageMemory()) {
+        cookie<User>("KTSESSION", storage = SessionStorageMemory()) {
             cookie.path = "/"
             cookie.extensions["SameSite"] = "strict"
         }
@@ -40,8 +42,8 @@ fun Application.main() {
             passwordParamName = "password"
             validate { credentials ->
                 dbQuery {
-                    UserDao.select {
-                        (UserDao.username eq credentials.name) and (UserDao.password eq DigestUtils.sha256Hex(
+                    UserTable.select {
+                        (UserTable.username eq credentials.name) and (UserTable.password eq DigestUtils.sha256Hex(
                             credentials.password
                         ))
                     }.firstOrNull()?.let {
@@ -49,7 +51,7 @@ fun Application.main() {
                     }
                 }
             }
-            skipWhen { call -> call.sessions.get<Profile>() != null }
+            skipWhen { call -> call.sessions.get<User>() != null }
         }
     }
 
@@ -60,10 +62,10 @@ fun Application.main() {
                 val principal = call.principal<UserIdPrincipal>()
                 val result = if (principal != null) {
                     dbQuery {
-                        UserDao.select { UserDao.username eq principal.name }.firstOrNull()?.let {
-                            val profile =
-                                Profile(it[UserDao.id], it[UserDao.name], it[UserDao.username].toString(), null, null)
-                            call.sessions.set(profile)
+                        UserTable.select { UserTable.username eq principal.name }.firstOrNull()?.let {
+                            val user =
+                                User(it[UserTable.id], it[UserTable.name], it[UserTable.username].toString(), null, null)
+                            call.sessions.set(user)
                             HttpStatusCode.OK
                         } ?: HttpStatusCode.Unauthorized
                     }
@@ -73,11 +75,11 @@ fun Application.main() {
                 call.respond(result)
             }
             get("logout") {
-                call.sessions.clear<Profile>()
+                call.sessions.clear<User>()
                 call.respondRedirect("/")
             }
             applyRoutes(getServiceManager<IAddressService>())
-            applyRoutes(getServiceManager<IProfileService>())
+            applyRoutes(getServiceManager<IUserService>())
         }
     }
     kvisionInit()
