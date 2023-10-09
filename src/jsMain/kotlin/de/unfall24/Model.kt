@@ -4,7 +4,7 @@ import de.unfall24.model.Address
 import de.unfall24.model.User
 import de.unfall24.service.AddressService
 import de.unfall24.service.UserService
-import de.unfall24.service.RegisterProfileService
+import de.unfall24.service.RegisterUserService
 import de.unfall24.service.Sort
 import io.kvision.state.ObservableList
 import io.kvision.state.ObservableValue
@@ -16,7 +16,7 @@ object Model {
 
     private val addressService = AddressService()
     private val userService = UserService()
-    private val registerProfileService = RegisterProfileService()
+    private val registerUserService = RegisterUserService()
 
     val addresses: ObservableList<Address> = observableListOf()
     val user = ObservableValue(User())
@@ -72,15 +72,15 @@ object Model {
         }
     }
 
-    suspend fun readProfile() {
+    suspend fun readUser() {
         Security.withAuth {
             user.value = userService.getUser()
         }
     }
 
-    suspend fun registerProfile(user: User): Boolean {
+    suspend fun registerUser(user: User): Boolean {
         return try {
-            registerProfileService.registerProfile(user)
+            registerUserService.registerUser(user)
         } catch (e: Exception) {
             console.log(e)
             false

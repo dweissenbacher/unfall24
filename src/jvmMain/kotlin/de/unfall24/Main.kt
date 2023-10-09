@@ -1,12 +1,11 @@
 package de.unfall24
 
 import de.unfall24.database.Db
-import de.unfall24.database.Db.dbQuery
-import de.unfall24.database.UserTable
 import de.unfall24.model.User
+import de.unfall24.repository.UserRepository
 import de.unfall24.service.IAddressService
+import de.unfall24.service.IRegisterUserService
 import de.unfall24.service.IUserService
-import de.unfall24.service.IRegisterProfileService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -19,9 +18,6 @@ import io.ktor.server.sessions.*
 import io.kvision.remote.applyRoutes
 import io.kvision.remote.getServiceManager
 import io.kvision.remote.kvisionInit
-import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
 import kotlin.collections.set
 
 fun Application.main() {
@@ -40,44 +36,31 @@ fun Application.main() {
         form {
             userParamName = "username"
             passwordParamName = "password"
-            validate { credentials ->
-                dbQuery {
-                    UserTable.select {
-                        (UserTable.username eq credentials.name) and (UserTable.password eq DigestUtils.sha256Hex(
-                            credentials.password
-                        ))
-                    }.firstOrNull()?.let {
-                        UserIdPrincipal(credentials.name)
-                    }
-                }
-            }
+            validate { credentials -> UserRepository.validate(credentials) }
             skipWhen { call -> call.sessions.get<User>() != null }
         }
     }
 
     routing {
-        applyRoutes(getServiceManager<IRegisterProfileService>())
+        applyRoutes(getServiceManager<IRegisterUserService>())
         authenticate {
             post("login") {
-                val principal = call.principal<UserIdPrincipal>()
-                val result = if (principal != null) {
-                    dbQuery {
-                        UserTable.select { UserTable.username eq principal.name }.firstOrNull()?.let {
-                            val user =
-                                User(it[UserTable.id], it[UserTable.name], it[UserTable.username].toString(), null, null)
-                            call.sessions.set(user)
-                            HttpStatusCode.OK
-                        } ?: HttpStatusCode.Unauthorized
+                var result = HttpStatusCode.Unauthorized
+                call.principal<UserIdPrincipal>()?.let { principal ->
+                    UserRepository.getAuthenticatedUser(principal)?.let { user ->
+                        call.sessions.set(user)
+                        result = HttpStatusCode.OK
                     }
-                } else {
-                    HttpStatusCode.Unauthorized
                 }
+
                 call.respond(result)
             }
+
             get("logout") {
                 call.sessions.clear<User>()
                 call.respondRedirect("/")
             }
+
             applyRoutes(getServiceManager<IAddressService>())
             applyRoutes(getServiceManager<IUserService>())
         }

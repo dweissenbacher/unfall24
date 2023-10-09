@@ -119,7 +119,7 @@ class LoginWindow : Dialog<Credentials>(closeButton = false, escape = false, ani
         if (registerPanel.validate()) {
             val userData = registerPanel.getData()
             AppScope.launch {
-                if (Model.registerProfile(userData)
+                if (Model.registerUser(userData)
                 ) {
                     Alert.show(text = tr("User registered. You can now log in.")) {
                         hideRegisterForm()
@@ -142,6 +142,6 @@ object Security : SecurityMgr() {
     }
 
     override suspend fun afterLogin() {
-        Model.readProfile()
+        Model.readUser()
     }
 }
