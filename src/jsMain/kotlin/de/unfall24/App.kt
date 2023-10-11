@@ -1,27 +1,22 @@
 package de.unfall24
 
 import io.kvision.*
-import io.kvision.dropdown.dropDown
-import io.kvision.form.check.checkBox
 import io.kvision.form.text.text
 import io.kvision.html.ButtonStyle
+import io.kvision.html.button
 import io.kvision.html.div
-import io.kvision.html.icon
-import io.kvision.html.span
+import io.kvision.html.p
 import io.kvision.i18n.DefaultI18nManager
 import io.kvision.i18n.I18n
+import io.kvision.navbar.NavbarType
 import io.kvision.navbar.nav
 import io.kvision.navbar.navForm
-import io.kvision.navbar.navLink
 import io.kvision.navbar.navbar
-import io.kvision.panel.dockPanel
 import io.kvision.panel.root
-import io.kvision.panel.splitPanel
 import io.kvision.panel.vPanel
 import io.kvision.theme.ThemeManager
 import io.kvision.theme.themeSwitcher
 import io.kvision.utils.perc
-import io.kvision.utils.vh
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -45,22 +40,26 @@ class App : Application() {
             )
 
         root("kvapp") {
-            navbar("NavBar") {
-                nav {
-                    navLink("File", icon = "fas fa-file")
-                    navLink("Edit", icon = "fas fa-bars")
-                    dropDown(
-                        "Favourites",
-                        listOf("HTML" to "#!/basic", "Forms" to "#!/forms"),
-                        icon = "fas fa-star",
-                        forNavbar = true
-                    )
-                }
-                navForm {
-                    text(label = "Search:")
-                    checkBox(label = "Search") {
-                        inline = true
-                    }
+            navbar(
+                label = "Unfall24",
+                type = NavbarType.STICKYTOP,
+                collapseOnClick = true
+            ) {
+
+//                nav {
+//                    navLink("File", icon = "fas fa-file")
+//                    navLink("Edit", icon = "fas fa-bars")
+//                    dropDown(
+//                        "Favourites",
+//                        listOf("HTML" to "#!/basic", "Forms" to "#!/forms"),
+//                        icon = "fas fa-star",
+//                        forNavbar = true
+//                    )
+//                }
+
+                navForm(rightAlign = true) {
+                    text()
+                    button("Search", "fas fa-search")
                 }
 
                 nav(rightAlign = true) {
@@ -69,6 +68,18 @@ class App : Application() {
             }
 
             vPanel(spacing = 5) {
+                div(className = "jumbotron") {
+                    width = 90.perc
+                    div(className = "card") {
+                        div(className = "card-body") {
+                            p {
+                                content = "lorem ipsum..."
+                            }
+                        }
+                    }
+
+                }
+
                 div {
                     add(ListPanel)
                 }
@@ -93,6 +104,8 @@ fun main() {
         module.hot,
         BootstrapModule,
         BootstrapCssModule,
+        BootstrapIconsModule,
+        BootstrapUploadModule,
         FontAwesomeModule,
         CoreModule)
 }
