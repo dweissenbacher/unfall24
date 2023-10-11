@@ -1,7 +1,7 @@
-package de.unfall24
+package de.unfall24.model
 
-import de.unfall24.model.Address
-import de.unfall24.model.User
+import de.unfall24.AppScope
+import de.unfall24.Security
 import de.unfall24.service.AddressService
 import de.unfall24.service.UserService
 import de.unfall24.service.RegisterUserService

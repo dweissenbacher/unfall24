@@ -1,5 +1,6 @@
-package de.unfall24
+package de.unfall24.view
 
+import de.unfall24.model.Model
 import io.kvision.core.JustifyContent
 import io.kvision.html.ButtonStyle
 import io.kvision.html.button

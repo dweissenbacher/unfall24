@@ -1,5 +1,7 @@
-package de.unfall24
+package de.unfall24.view
 
+import de.unfall24.AppScope
+import de.unfall24.model.Model
 import de.unfall24.model.Address
 import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
@@ -41,16 +43,16 @@ object EditPanel : StackPanel() {
 
             add(HPanel(spacing = 10) {
                 button(tr("Save"), "fas fa-check", ButtonStyle.PRIMARY).onClick {
-                    this@EditPanel.save()
+                    save()
                 }
                 button(tr("Cancel"), "fas fa-times", ButtonStyle.SECONDARY).onClick {
-                    this@EditPanel.close()
+                    close()
                 }
             })
             onEvent {
                 keydown = {
                     if (it.keyCode == ENTER_KEY) {
-                        this@EditPanel.save()
+                        save()
                     }
                 }
             }
@@ -93,7 +95,7 @@ object EditPanel : StackPanel() {
     }
 
     private fun open(editingId: Int?) {
-        this.editingId = editingId
+        EditPanel.editingId = editingId
         activeChild = formPanel
         formPanel.validate()
         formPanel.getControl(Address::firstName)?.focus()

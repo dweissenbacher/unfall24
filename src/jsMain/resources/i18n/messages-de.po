@@ -95,4 +95,4 @@ msgstr ""
 
 #: ../src/frontendMain/kotlin/com/example/Security.kt:136
 msgid "Search"
-msgstr "Search"
+msgstr "Suche"
